@@ -80,6 +80,7 @@
         $height = isset($_POST['height']) ? (float)$_POST['height'] : null;
 
         // ตรวจสอบว่าข้อมูลน้ำหนักและส่วนสูงถูกต้อง
+        
         if ($weight > 0 && $height > 0) {
             // คำนวณ BMI
             $bmi = $weight / ($height * $height);
