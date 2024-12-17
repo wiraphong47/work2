@@ -72,48 +72,56 @@
 
 <div class="container">
     <h2>ผลการคำนวณ BMI</h2>
+
     <?php
+    //คำนวณ
+    function calculateBMI($weight, $height) {
+        $heightInMeters = $height / 100;  // Convert height to meters
+        return $weight / ($heightInMeters * $heightInMeters);
+    }
+
+    // บอกสถานะ
+    function determineStatusAndAdvice($bmi) {
+        if ($bmi < 18.5) {
+            return ["น้ำหนักน้อยกว่ามาตรฐาน", "ควรรับประทานอาหารที่มีประโยชน์และเพิ่มปริมาณอาหาร"];
+        } elseif ($bmi >= 18.5 && $bmi < 24.9) {
+            return ["น้ำหนักอยู่ในเกณฑ์ปกติ", "ควรรักษาน้ำหนักให้อยู่ในเกณฑ์นี้"];
+        } elseif ($bmi >= 25 && $bmi < 29.9) {
+            return ["น้ำหนักเกินมาตรฐาน", "ควรเริ่มควบคุมอาหารและออกกำลังกาย"];
+        } else {
+            return ["โรคอ้วน", "ควรปรึกษาแพทย์และดำเนินการลดน้ำหนัก"];
+        }
+    }
+
+    //รับค่ามาจากอีกไฟล์
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // รับค่าจากฟอร์ม
         $name = isset($_POST['name']) ? trim($_POST['name']) : null;
+        $age = isset($_POST['age']) ? trim($_POST['age']) : null;
         $weight = isset($_POST['weight']) ? (float)$_POST['weight'] : null;
         $height = isset($_POST['height']) ? (float)$_POST['height'] : null;
 
-        // ตรวจสอบว่าข้อมูลน้ำหนักและส่วนสูงถูกต้อง
         
         if ($weight > 0 && $height > 0) {
-            // คำนวณ BMI
-            $bmi = $weight / ($height * $height);
+            
+            $bmi = calculateBMI($weight, $height);
 
             
-            if ($bmi < 18.5) {
-                $status = "น้ำหนักน้อยกว่ามาตรฐาน";
-                $advice = "ควรรับประทานอาหารที่มีประโยชน์และเพิ่มปริมาณอาหาร";
-            } elseif ($bmi >= 18.5 && $bmi < 24.9) {
-                $status = "น้ำหนักอยู่ในเกณฑ์ปกติ";
-                $advice = "ควรรักษาน้ำหนักให้อยู่ในเกณฑ์นี้";
-            } elseif ($bmi >= 25 && $bmi < 29.9) {
-                $status = "น้ำหนักเกินมาตรฐาน";
-                $advice = "ควรเริ่มควบคุมอาหารและออกกำลังกาย";
-            } else {
-                $status = "โรคอ้วน";
-                $advice = "ควรปรึกษาแพทย์และดำเนินการลดน้ำหนัก";
-            }
+            list($status, $advice) = determineStatusAndAdvice($bmi);
         } else {
-            
             $bmi = null;
             $status = "ไม่สามารถคำนวณได้";
             $advice = "โปรดกรอกข้อมูลน้ำหนักและส่วนสูงที่ถูกต้อง";
         }
     } else {
-        
         echo "<h3 style='color: red;'>ไม่มีข้อมูลที่ส่งมา</h3>";
         exit;
     }
     ?>
-
+   
     <?php if ($bmi !== null): ?>
+        
         <h3>ชื่อ: <?php echo htmlspecialchars($name); ?></h3>
+        <h3>อายุ: <?php echo number_format($age); ?></h3>
         <h3>น้ำหนัก: <?php echo number_format($weight, 1); ?> กิโลกรัม</h3>
         <h3>ส่วนสูง: <?php echo number_format($height, 2); ?> เมตร</h3>
         <h3>BMI: <span style="color: blue;"><?php echo number_format($bmi, 2); ?></span></h3>
@@ -125,8 +133,6 @@
     <?php endif; ?>
 
     <a href="input.php" class="back-link">กลับไปคำนวณใหม่</a>
-</div>
-
 </div>
 
 </body>

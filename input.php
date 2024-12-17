@@ -99,9 +99,11 @@
     <form action="bmi.php" method="post">
     <label>ชื่อ:</label>
     <input type="text" name="name" required><br>
+    <label>อายุ</label>
+    <input type="number" name="age"required><br>
     <label>น้ำหนัก (กิโลกรัม):</label>
     <input type="number" name="weight" step="0.1" required><br>
-    <label>ส่วนสูง (เมตร ตย.1.70):</label>
+    <label>ส่วนสูง (เมตร):</label>
     <input type="number" name="height" step="0.01" required><br>
     <button type="submit">คำนวณ BMI</button>
 </form>
